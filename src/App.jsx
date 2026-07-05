@@ -1,4 +1,6 @@
 import React, { useMemo, useState } from "react";
+import "./App.css";
+
 import {
   Search,
   Stethoscope,
@@ -8,7 +10,6 @@ import {
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
-
 const services = [
   {
     name: "Dovail Health",
