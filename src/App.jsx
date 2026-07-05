@@ -73,6 +73,7 @@ export default function App() {
         </div>
 
         <h1>Dovail</h1>
+
         <p className="subtitle">
           Search and open all Dovail services from one simple homepage.
         </p>
