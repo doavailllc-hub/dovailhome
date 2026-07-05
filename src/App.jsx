@@ -1,41 +1,27 @@
 import React, { useMemo, useState } from "react";
 import "./App.css";
-
 import {
   Search,
   Stethoscope,
   Home,
-  Globe2,
   ArrowUpRight,
-  ShieldCheck,
   Sparkles,
 } from "lucide-react";
 
 const services = [
   {
     name: "Dovail Health",
-    description: "Doctor booking, appointments and healthcare services.",
+    description: "Book doctors, appointments and healthcare services.",
     url: "https://health.dovail.com",
     icon: Stethoscope,
     color: "#0c6fb2",
-    status: "Live",
   },
   {
     name: "Dovail Stay",
-    description: "Stays, trips, hosts and guest booking platform.",
+    description: "Find stays, trips and host travel experiences.",
     url: "https://stay.dovail.com",
     icon: Home,
     color: "#7e4ff5",
-    status: "Live",
-  },
-  {
-    name: "More Services",
-    description: "Future Dovail products will appear here.",
-    url: "#",
-    icon: Globe2,
-    color: "#df9d21",
-    status: "Coming soon",
-    disabled: true,
   },
 ];
 
@@ -43,72 +29,66 @@ export default function App() {
   const [search, setSearch] = useState("");
 
   const filteredServices = useMemo(() => {
+    const keyword = search.trim().toLowerCase();
+
+    if (!keyword) return services;
+
     return services.filter((service) =>
-      `${service.name} ${service.description}`
-        .toLowerCase()
-        .includes(search.toLowerCase())
+      `${service.name} ${service.description}`.toLowerCase().includes(keyword)
     );
   }, [search]);
 
-  const openService = (service) => {
-    if (service.disabled) return;
-    window.location.href = service.url;
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+
+    if (filteredServices.length === 1) {
+      window.location.href = filteredServices[0].url;
+    }
   };
 
   return (
     <main className="page">
-      <header className="header">
-        <div className="brand">
-          <div className="brandLogo">D</div>
-          <span>Dovail</span>
-        </div>
+      <header className="topNav">
+        <div />
 
-        <nav>
+        <nav className="navLinks" aria-label="Dovail navigation">
+          <a href="https://health.dovail.com">Health</a>
+          <a href="https://stay.dovail.com">Stay</a>
           <a href="mailto:business@dovail.com">Business</a>
         </nav>
       </header>
 
       <section className="hero">
-        <div className="badge">
-          <Sparkles size={15} />
-          Dovail Products
-        </div>
+        <img src="/logo.png" alt="Dovail" className="centerLogo" />
 
-        <h1>Dovail</h1>
-
-        <p className="subtitle">
-          Search and open all Dovail services from one simple homepage.
-        </p>
-
-        <div className="searchBox">
+        <form className="searchBox" onSubmit={handleSearchSubmit}>
           <Search size={22} />
-
           <input
-            type="text"
-            placeholder="Search Dovail Health, Dovail Stay..."
+            type="search"
+            placeholder="Search Dovail services"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
+        </form>
+
+        <div className="quickLinks">
+          <a href="https://health.dovail.com">Dovail Health</a>
+          <a href="https://stay.dovail.com">Dovail Stay</a>
         </div>
 
-        <div className="grid">
+        <div className="serviceGrid">
           {filteredServices.map((service) => {
             const Icon = service.icon;
 
             return (
-              <button
+              <a
                 key={service.name}
-                className={`card ${service.disabled ? "disabled" : ""}`}
-                onClick={() => openService(service)}
+                href={service.url}
+                className="serviceCard"
+                style={{ "--service-color": service.color }}
               >
-                <div
-                  className="iconBox"
-                  style={{
-                    color: service.color,
-                    backgroundColor: `${service.color}16`,
-                  }}
-                >
-                  <Icon size={30} />
+                <div className="serviceIcon">
+                  <Icon size={28} />
                 </div>
 
                 <div>
@@ -116,23 +96,22 @@ export default function App() {
                   <p>{service.description}</p>
                 </div>
 
-                <div className="cardFooter">
-                  <span>
-                    <ShieldCheck size={14} />
-                    {service.status}
-                  </span>
-
-                  {!service.disabled && <ArrowUpRight size={18} />}
-                </div>
-              </button>
+                <span className="openLink">
+                  Open <ArrowUpRight size={16} />
+                </span>
+              </a>
             );
           })}
+        </div>
+
+        <div className="comingSoon">
+          <Sparkles size={16} />
+          More Dovail services coming soon
         </div>
       </section>
 
       <footer>
-        <span>© {new Date().getFullYear()} Dovail</span>
-        <span>business@dovail.com</span>
+        © {new Date().getFullYear()} Dovail · business@dovail.com
       </footer>
     </main>
   );
