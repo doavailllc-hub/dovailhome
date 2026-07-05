@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
+
 const services = [
   {
     name: "Dovail Health",
@@ -81,6 +82,7 @@ export default function App() {
 
         <div className="searchBox">
           <Search size={22} />
+
           <input
             type="text"
             placeholder="Search Dovail Health, Dovail Stay..."
@@ -120,7 +122,7 @@ export default function App() {
                     {service.status}
                   </span>
 
-                  {!service.disabled && <ArrowUpRight size={19} />}
+                  {!service.disabled && <ArrowUpRight size={18} />}
                 </div>
               </button>
             );
